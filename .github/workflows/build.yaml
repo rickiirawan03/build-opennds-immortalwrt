@@ -35,17 +35,13 @@ jobs:
           mv openNDS-10.3.1/* .
           rm -rf v10.3.1.zip openNDS-10.3.1
 
-          # Buat Makefile untuk opennds
+          # Buat Makefile untuk opennds (pakai source lokal, tidak download via dl/)
           cat << 'EOF' > Makefile
           include $(TOPDIR)/rules.mk
 
           PKG_NAME:=opennds
           PKG_VERSION:=10.3.1
           PKG_RELEASE:=1
-
-          PKG_SOURCE_URL:=https://github.com/openNDS/openNDS/archive/refs/tags
-          PKG_SOURCE:=v$(PKG_VERSION).tar.gz
-          PKG_HASH:=skip
 
           PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 
@@ -60,6 +56,11 @@ jobs:
 
           define Package/opennds/description
             OpenNDS (Open Network Demarcation Service) - a high performance, small footprint Captive Portal.
+          endef
+
+          define Build/Prepare
+            mkdir -p $(PKG_BUILD_DIR)
+            $(CP) ./ $(PKG_BUILD_DIR)/
           endef
 
           define Build/Compile
